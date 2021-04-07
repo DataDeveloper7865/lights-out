@@ -27,7 +27,7 @@ import "./Board.css";
  *
  **/
 
-function Board({ nrows = 3, ncols = 3, chanceLightStartsOn }) {
+function Board({ nrows = 3, ncols = 3, chanceLightStartsOn = 0.5 }) {
   const [board, setBoard] = useState(createBoard());
 
   /** create a board nrows high/ncols wide, each cell randomly lit or unlit */
@@ -44,9 +44,8 @@ function Board({ nrows = 3, ncols = 3, chanceLightStartsOn }) {
     return initialBoard;
   }
 
-  function chanceLightStarts(chanceLightStartsOn) {
-    let checkValue = Math.random()
-    return checkValue > 0.5
+  function chanceLightStarts() {
+    return Math.random() > chanceLightStartsOn
   }
 
   function hasWon() {
@@ -110,18 +109,18 @@ function Board({ nrows = 3, ncols = 3, chanceLightStartsOn }) {
   for (let rowNum = 0; rowNum < nrows; rowNum++) {
     let row = []
     for (let colNum = 0; colNum < ncols; colNum++) {
-      row.push(<Cell flipCellsAroundMe={flipCellsAround} isLit={board[rowNum][colNum]}/>)
+      let coord=`${rowNum}-${colNum}`;
+      row.push(<Cell flipCellsAroundMe={() => flipCellsAround(coord)} isLit={board[rowNum][colNum]}/>)
     }
     finalBoard.push(row);
   }
 
   // TODO
-
-
+  let Tcells = finalBoard.map(row=><tr>{row.map(e=>e)}</tr>)
   return(
     <table>
       <thead>
-        {finalBoard}
+        {Tcells}
       </thead>
     </table>
   )
